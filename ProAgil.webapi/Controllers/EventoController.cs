@@ -76,7 +76,7 @@ namespace ProAgil.webapi.Controllers
             return BadRequest();
         }
 
-        [HttpPut]
+        [HttpPut("{eventoId}")]
         public async Task<IActionResult> Put(int eventoId, Evento model)
         {  
             try
@@ -98,7 +98,7 @@ namespace ProAgil.webapi.Controllers
             return BadRequest();
         }
 
-        [HttpDelete]
+        [HttpDelete("{eventoId}")]
         public async Task<IActionResult> Delete(int eventoId)
         {  
             try
