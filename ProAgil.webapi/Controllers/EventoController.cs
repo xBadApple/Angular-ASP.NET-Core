@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
@@ -29,6 +30,33 @@ namespace ProAgil.webapi.Controllers
                 var eventos = await _repo.GetAllEventoAsync(true);
                 var result = _mapper.Map<EventoDto[]>(eventos);
                 return Ok(result);
+            }
+            catch (System.Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco de dados falhou");
+            }
+        }
+
+        [HttpPost("upload")]
+        public IActionResult Upload()
+        {  
+            try
+            {
+                var file = Request.Form.Files[0];
+                var folderPath = Path.Combine("Resources","Images");
+                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderPath);
+
+                if(file.Length > 0)
+                {
+                    var fileName = file.FileName.Replace("\""," ").Trim();
+                    var fullPath = Path.Combine(pathToSave, fileName);
+
+                    using(var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        file.CopyToAsync(stream);
+                    }
+                }
+                return Ok();
             }
             catch (System.Exception)
             {

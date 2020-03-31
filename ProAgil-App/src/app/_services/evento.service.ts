@@ -35,5 +35,13 @@ export class EventoService {
     return this.http.delete(`${this.baseURL}/${eventoId}`);
   }
 
+  postUpload(file: File) {
+    const fileToUpload = file[0] as File;
+    const formData = new FormData();
+    formData.append('file', fileToUpload, fileToUpload.name);
+
+    return this.http.post(`${this.baseURL}/upload`, formData);
+  }
+
 
 }
